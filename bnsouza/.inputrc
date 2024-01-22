@@ -1,0 +1,35 @@
+# Ativando os numeros no teclado
+
+# 0 . Enter
+bindkey -s "^[Op" "0"
+bindkey -s "^[Ol" ","
+bindkey -s "^[OM" "^M"
+
+# 1 2 3
+bindkey -s "^[Oq" "1"
+bindkey -s "^[Or" "2"
+bindkey -s "^[Os" "3"
+
+# 4 5 6
+bindkey -s "^[Ot" "4"
+bindkey -s "^[Ou" "5"
+bindkey -s "^[Ov" "6"
+
+# 7 8 9
+bindkey -s "^[Ow" "7"
+bindkey -s "^[Ox" "8"
+bindkey -s "^[Oy" "9"
+
+# + -  * /
+bindkey -s "^[Ok" "+"
+bindkey -s "^[Om" "-"
+bindkey -s "^[Oj" "*"
+bindkey -s "^[Oo" "/"
+
+# HOME e END
+bindkey -s "^[[1~" beginning-of-line
+bindkey -s "^[[4~" end-of-line
+
+# Ctrl + <- / Ctrl + ->
+bindkey -s "\e[5C" forward-word
+bindkey -s "\e[5D" backward-word

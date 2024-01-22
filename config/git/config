@@ -1,0 +1,16 @@
+[user]
+	name = Bruno Souza
+	email = bruno@nfenarede.com.br
+
+[github]
+	user = bnsouza
+
+[core]
+	excludesfile = ~/.config/git/ignore
+	editor = code --wait
+
+[credential]
+	helper = osxkeychain
+
+[pull]
+	rebase = true

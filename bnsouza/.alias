@@ -1,0 +1,6 @@
+# Melhorando o comando 'll'
+alias ll='ls -laFh'
+
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
