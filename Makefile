@@ -7,7 +7,7 @@ export XDG_CONFIG_HOME = $(HOME)/.config
 export STOW_DIR = $(DOTFILES_DIR)
 export ACCEPT_EULA=Y
 
-all: sudo core packages link macosdefaults
+all: sudo core packages link macosdefaults files
 
 sudo:
 ifndef GITHUB_ACTION
@@ -64,3 +64,7 @@ unlink: stow
 
 macosdefaults:
 	source $(DOTFILES_DIR)/macosdefaults.sh
+
+files:
+	mkdir -p $(HOME)/Library/KeyBindings
+	mv -v files/DefaultKeyBinding.Dict $(HOME)/Library/KeyBindings/DefaultKeyBinding.Dict
