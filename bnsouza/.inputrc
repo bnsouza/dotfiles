@@ -30,6 +30,6 @@ bindkey -s "^[Oo" "/"
 bindkey -s "^[[1~" beginning-of-line
 bindkey -s "^[[4~" end-of-line
 
-# Ctrl + <- / Ctrl + ->
-bindkey -s "\e[5C" forward-word
-bindkey -s "\e[5D" backward-word
+# Option + <- / Option + ->
+bindkey "^[^[[D" backward-word
+bindkey "^[^[[C" forward-word

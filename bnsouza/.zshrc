@@ -75,3 +75,6 @@ export CPPFLAGS="-I/usr/local/opt/mysql-client/include"
 
 # ZSH Syntax Highlight
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# OpenSSL v1.1 (para certificados PFK)
+export PATH="/opt/homebrew/opt/openssl@1.1/bin:$PATH"
