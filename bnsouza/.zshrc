@@ -78,3 +78,11 @@ source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # OpenSSL v1.1 (para certificados PFK)
 export PATH="/opt/homebrew/opt/openssl@1.1/bin:$PATH"
+
+# pnpm
+export PNPM_HOME="/Users/bnsouza/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end

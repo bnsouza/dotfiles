@@ -36,7 +36,7 @@ nvm: brew-packages
 brew-packages: brew
 	brew bundle --file=$(DOTFILES_DIR)/install/Brewfile || true
 
-packages: brew-packages # cask-apps node-packages
+packages: brew-packages cask-apps # node-packages
 
 cask-apps: brew
 	brew bundle --file=$(DOTFILES_DIR)/install/Caskfile || true
@@ -67,4 +67,5 @@ macosdefaults:
 
 files:
 	mkdir -p $(HOME)/Library/KeyBindings
-	mv -v files/DefaultKeyBinding.Dict $(HOME)/Library/KeyBindings/DefaultKeyBinding.Dict
+	cp -v files/DefaultKeyBinding.Dict $(HOME)/Library/KeyBindings/DefaultKeyBinding.Dict
+	cp -v files/com.googlecode.iterm2.plist $(HOME)/Library/Preferences/com.googlecode.iterm2.plist

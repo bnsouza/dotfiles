@@ -1,6 +1,71 @@
 # Melhorando o comando 'll'
 alias ll='ls -laFh'
 
+# Melhorando o comando 'cd'
 alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
+
+# Comando para validar os certificados
+certificado() {
+    arquivo=$1
+    senha=$2
+    cnpj_opcional=$3 # CNPJ opcional para ser usado caso o CNPJ não seja encontrado no certificado
+
+    echo " "
+
+    # Verifica se o arquivo existe
+    if [ ! -f "$arquivo" ]; then
+        echo "Erro: O arquivo '$arquivo' não existe!"
+        return 1
+    fi
+
+    # Tenta extrair informações usando openssl para verificar se a senha está correta
+    if ! openssl_output=$(openssl pkcs12 -in "$arquivo" -nodes -passin pass:"$senha" -noout 2>&1); then
+        echo "Erro ao processar o certificado. Verifique se a senha está correta.\n"
+        echo "Saída do OpenSSL:"
+        echo "$openssl_output"
+        return 2
+    fi
+
+    # Extrai o CNPJ usando sed
+    cnpj=$(openssl pkcs12 -in "$arquivo" -nodes -passin pass:"$senha" | openssl x509 -noout -subject | sed -n 's/.*\([0-9]\{14\}\).*/\1/p')
+
+    if [ -n "$cnpj" ]; then
+        echo "CNPJ: $cnpj\n"
+    else
+        echo "CNPJ não encontrado no certificado..."
+        if [ -n "$cnpj_opcional" ]; then
+            cnpj=$cnpj_opcional
+            echo "Utilizando CNPJ opcional fornecido: $cnpj"
+        else
+            echo "Erro: CNPJ não fornecido e não encontrado no certificado!"
+            return 3
+        fi
+    fi
+
+    # Extrai a data de expiração e formata
+    validade=$(openssl pkcs12 -in "$arquivo" -nodes -passin pass:"$senha" | openssl x509 -noout -enddate | cut -d= -f2 | tr -d ' ')
+    if [ -z "$validade" ]; then
+        echo "Erro: Não foi possível extrair a data de validade do certificado."
+        return 3
+    fi
+
+    # Converte e formata a data para os formato utilizados
+    novoNome=$(date -j -f "%b %d %T %Y" "$(echo $validade | sed 's/GMT//')" +"%Y%m%d%H%M%S")
+    ISODate=$(date -j -f "%b %d %T %Y" "$(echo $validade | sed 's/GMT//')" +"%Y-%m-%dT%H:%M:%S")
+
+    # Comando para criptografar a senha e imprimir
+    senhaCrypt=$(php -r "echo openssl_encrypt('$senha', 'AES-128-ECB', 'c67ff511bd88d857');")
+    if [ -z "$senhaCrypt" ]; then
+        echo "Erro: Não foi possível criptografar a senha."
+        return 4
+    fi
+
+    # Move o arquivo para o S3
+    aws s3 cp "$arquivo" "s3://nfenarede-certificados/$cnpj/$novoNome.pfx" --profile prod
+
+    # Imprime o resultado
+    echo "\nJSON do Certificado para MongoDB:"
+    echo "{\"validade\": new ISODate(\"$ISODate.000Z\"), \"s3\": \"$cnpj/$novoNome.pfx\", \"senha\": \"$senhaCrypt\"}"
+}

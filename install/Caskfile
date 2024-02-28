@@ -1,3 +1,4 @@
+tap "homebrew/cask"
 tap "homebrew/cask-fonts"
 tap "homebrew/cask-versions"
 
@@ -20,7 +21,6 @@ cask "ngrok"
 cask "notion"
 cask "orbstack"
 cask "postman"
-cask "raycast"
 cask "raycast"
 cask "spotify"
 cask "teamviewer"
