@@ -52,8 +52,8 @@ certificado() {
     fi
 
     # Converte e formata a data para os formato utilizados
-    novoNome=$(date -j -f "%b %d %T %Y" "$(echo $validade | sed 's/GMT//')" +"%Y%m%d%H%M%S")
-    ISODate=$(date -j -f "%b %d %T %Y" "$(echo $validade | sed 's/GMT//')" +"%Y-%m-%dT%H:%M:%S")
+    novoNome=$(LC_ALL=C date -j -f "%b %d %T %Y" "$(echo $validade | sed 's/GMT//')" +"%Y%m%d%H%M%S")
+    ISODate=$(LC_ALL=C date -j -f "%b %d %T %Y" "$(echo $validade | sed 's/GMT//')" +"%Y-%m-%dT%H:%M:%S")
 
     # Comando para criptografar a senha e imprimir
     senhaCrypt=$(php -r "echo openssl_encrypt('$senha', 'AES-128-ECB', 'c67ff511bd88d857');")
