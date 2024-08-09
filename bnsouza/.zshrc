@@ -89,3 +89,14 @@ esac
 
 # bun completions
 [ -s "/Users/bnsouza/.bun/_bun" ] && source "/Users/bnsouza/.bun/_bun"
+
+# Tokens
+source $HOME/.tokens
+
+# Infisical
+export INFISICAL_TOKEN=$(infisical login --method=universal-auth --silent --plain)
+
+# Pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"

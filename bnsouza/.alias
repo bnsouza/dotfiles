@@ -6,7 +6,6 @@ alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
 
-# Comando para validar os certificados
 certificado() {
     arquivo=$1
     senha=$2
@@ -45,15 +44,15 @@ certificado() {
     fi
 
     # Extrai a data de expiração e formata
-    validade=$(openssl pkcs12 -in "$arquivo" -nodes -passin pass:"$senha" | openssl x509 -noout -enddate | cut -d= -f2 | tr -d ' ')
+    validade=$(openssl pkcs12 -in "$arquivo" -nodes -passin pass:"$senha" | openssl x509 -noout -enddate | cut -d= -f2)
     if [ -z "$validade" ]; then
         echo "Erro: Não foi possível extrair a data de validade do certificado."
         return 3
     fi
 
-    # Converte e formata a data para os formato utilizados
-    novoNome=$(LC_ALL=C date -j -f "%b %d %T %Y" "$(echo $validade | sed 's/GMT//')" +"%Y%m%d%H%M%S")
-    ISODate=$(LC_ALL=C date -j -f "%b %d %T %Y" "$(echo $validade | sed 's/GMT//')" +"%Y-%m-%dT%H:%M:%S")
+    # Converte e formata a data para os formatos utilizados
+    novoNome=$(LC_ALL=C date -j -f "%b %d %H:%M:%S %Y %Z" "$validade" +"%Y%m%d%H%M%S")
+    ISODate=$(LC_ALL=C date -j -f "%b %d %H:%M:%S %Y %Z" "$validade" +"%Y-%m-%dT%H:%M:%S")
 
     # Comando para criptografar a senha e imprimir
     senhaCrypt=$(php -r "echo openssl_encrypt('$senha', 'AES-128-ECB', 'c67ff511bd88d857');")
@@ -68,4 +67,82 @@ certificado() {
     # Imprime o resultado
     echo "\nJSON do Certificado para MongoDB:"
     echo "{\"validade\": new ISODate(\"$ISODate.000Z\"), \"s3\": \"$cnpj/$novoNome.pfx\", \"senha\": \"$senhaCrypt\"}"
+}
+
+
+nfe-download(){
+    cnpj=$1
+    a=$2
+    mes=$3
+
+    echo " "
+
+    # Verifica se o cnpj tem 14 dígitos
+    if [[ $cnpj =~ ^[0-9]{14}$ ]]; then
+        cnpj=("$cnpj")
+    else
+        # Permite trocar o nome da empresa pelo CNPJ
+        case "$cnpj" in
+            keide)
+                cnpj=("20877867000137")
+                ;;
+            proenter)
+                cnpj=("34914041000105")
+                ;;
+            grid)
+                cnpj=("35209579000181" "35507966000102")
+                ;;
+            amg)
+                cnpj=("32827879000136" "76768563000439" "31901951000165" "76768563000196" "17011946000156" "76768563000510")
+                ;;
+            arthur)
+                cnpj=("36451073000147" "23747853000197" "23749594000133")
+                ;;
+            jacare)
+                cnpj=("17046931000123")
+                ;;
+            win)
+                cnpj=("46673461000126" "53729797000200" "53729797000129")
+                ;;
+            *)
+                ;;
+        esac
+    fi
+
+    # Se não tiver CNPJ, sai com erro
+    if [[ ${#cnpj[@]} -eq 0 ]]; then
+        echo "Erro: Empresa não encontrada ou não reconhecida."
+        return 1
+    fi
+
+    # Testa se o tipo de arquivo foi informado, senão pega todos
+    if [ -z "$a" ]; then
+        echo "Tipo de arquivo não informado, baixando todos..."
+        a="*"
+    fi
+
+    # Testa se o mês foi informado, senão pega o mês anterior
+    if [ -z "$mes" ]; then
+        ano_atual=$(date +%y)
+        mes_anterior=$(date -v-1m +%m)
+        mes="${ano_atual}${mes_anterior}"
+        echo "Mês não informado, definindo como mês anterior ($mes_anterior)..."
+    fi
+
+    # Testa se a pasta `~/Sites/arquivosNFe/` existe, senão cria
+    if [ ! -d ~/Sites/arquivosNFe/ ]; then
+        echo "Criando pasta para armazenar os arquivos..."
+        mkdir ~/Sites/arquivosNFe/
+    fi
+
+    echo "------------------------------------------------------------------"
+
+    for c in "${cnpj[@]}"; do
+        # Baixa os arquivos do S3
+        echo "Baixando arquivos do CNPJ $c referente ao ano/mês $mes..."
+        aws s3 cp s3://nfenarede-notasfiscais/$c ~/Sites/arquivosNFe/$c/ --profile prod --recursive --exclude "*" --include "*$mes$c*.$a"
+
+        # Cria um ZIP com os arquivos baixados
+        zip -rj ~/Sites/arquivosNFe/$c-$mes.zip ~/Sites/arquivosNFe/$c/
+    done
 }
