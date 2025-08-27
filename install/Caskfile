@@ -1,29 +1,37 @@
 tap "homebrew/cask"
 tap "homebrew/cask-fonts"
-tap "homebrew/cask-versions"
 
-cask "1password"
-cask "anydesk"
-cask "arc"
-cask "beardedspice"
-cask "datagrip"
-cask "discord"
-cask "dropbox"
-cask "figma"
-cask "font-fira-code-nerd-font"
-cask "font-fira-code"
-cask "font-hack"
-cask "google-chrome"
-cask "iterm2"
-cask "karabiner-elements"
-cask "microsoft-remote-desktop"
-cask "ngrok"
-cask "notion"
-cask "orbstack"
-cask "postman"
-cask "raycast"
-cask "spotify"
-cask "teamviewer"
-cask "visual-studio-code"
-cask "vlc"
-cask "whatsapp"
+# Aplicações essenciais
+cask "1password"                    # Gerenciador de senhas
+cask "google-chrome"               # Navegador web
+cask "visual-studio-code"          # Editor de código
+
+# Ferramentas de desenvolvimento
+cask "karabiner-elements"          # Customização de teclado
+cask "figma"                       # Ferramenta de design
+cask "datagrip"                    # IDE de banco de dados
+cask "github-desktop"              # Cliente Git visual
+cask "postman"                     # Testes de API
+cask "docker"                      # Container management
+
+# Fontes
+cask "font-fira-code"              # Fonte para programação
+cask "font-fira-code-nerd-font"    # Fonte para programação com ícones
+cask "font-hack"                   # Fonte alternativa para programação
+
+# Acesso remoto e colaboração
+cask "anydesk"                     # Desktop remoto
+cask "microsoft-remote-desktop"    # Cliente RDP da Microsoft
+
+# Comunicação e produtividade
+cask "discord"                    # Chat para comunidades
+cask "linear"                     # Gestão de projetos
+cask "claude"                     # Cliente Claude desktop
+
+# Terminal e utilitários
+cask "iterm2"                     # Terminal avançado
+cask "raycast"                    # Launcher e produtividade
+
+# Utilitários
+cask "beardedspice"               # Teclas de mídia para players web
+cask "whatsapp"                   # Mensagens
