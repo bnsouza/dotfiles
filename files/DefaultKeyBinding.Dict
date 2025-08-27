@@ -1,26 +1,26 @@
 /* ~/Library/KeyBindings/DefaultKeyBinding.Dict
 
-This file remaps the key bindings of a single user on Mac OS X 10.5 to more
-closely match default behavior on Windows systems. This makes the Command key
-behave like Windows Control key. To use Control instead of Command, either swap
-Control and Command in Apple->System Preferences->Keyboard->Modifier Keys...
-or replace @ with ^ in this file.
+Este arquivo remapeia as combinações de teclas de um único usuário no macOS para
+combinar mais proximamente com o comportamento padrão de sistemas Windows. Isso faz
+a tecla Command se comportar como a tecla Control do Windows. Para usar Control ao
+invés de Command, troque Control e Command em Apple->Preferências do Sistema->
+Teclado->Teclas Modificadoras... ou substitua @ por ^ neste arquivo.
 
-Here is a rough cheatsheet for syntax.
-Key Modifiers
+Aqui está uma referência rápida da sintaxe.
+Teclas Modificadoras
 ^ : Ctrl
 $ : Shift
 ~ : Option (Alt)
 @ : Command (Apple)
-# : Numeric Keypad
+# : Teclado Numérico
 
-Non-Printable Key Codes
+Códigos de Teclas Não-Imprimíveis
 
-Standard
-Up Arrow:     \UF700        Backspace:    \U0008        F1:           \UF704
-Down Arrow:   \UF701        Tab:          \U0009        F2:           \UF705
-Left Arrow:   \UF702        Escape:       \U001B        F3:           \UF706
-Right Arrow:  \UF703        Enter:        \U000A        ...
+Padrão
+Seta Cima:    \UF700        Backspace:    \U0008        F1:           \UF704
+Seta Baixo:   \UF701        Tab:          \U0009        F2:           \UF705
+Seta Esq:     \UF702        Escape:       \U001B        F3:           \UF706
+Seta Dir:     \UF703        Enter:        \U000A        ...
 Insert:       \UF727        Page Up:      \UF72C
 Delete:       \UF728        Page Down:    \UF72D
 Home:         \UF729        Print Screen: \UF72E
@@ -29,14 +29,14 @@ Break:        \UF732        Pause:        \UF730
 SysReq:       \UF731        Menu:         \UF735
 Help:         \UF746
 
-OS X
+macOS
 delete:       \U007F
 
-For a good reference see http://osxnotes.net/keybindings.html.
+Para uma boa referência veja http://osxnotes.net/keybindings.html.
 
-NOTE: typically the Windows 'Insert' key is mapped to what Macs call 'Help'.
-Regular Mac keyboards don't even have the Insert key, but provide 'Fn' instead,
-which is completely different.
+NOTA: tipicamente a tecla 'Insert' do Windows é mapeada para o que os Macs chamam de 'Help'.
+Teclados Mac normais nem têm a tecla Insert, mas fornecem 'Fn' ao invés,
+que é completamente diferente.
 */
 
 {

@@ -1,10 +1,83 @@
-# Melhorando o comando 'll'
-alias ll='ls -laFh'
+# === ALIASES CLI MODERNOS ===
 
-# Melhorando o comando 'cd'
+# Melhor ls com eza (colorido e informativo)
+alias ll='eza -la --icons --git'         # Lista longa com ícones e status git
+alias la='eza -a --icons'                # Todos os arquivos com ícones
+alias lt='eza -T --level=2 --icons'      # Visualização em árvore (2 níveis)
+alias ls='eza --icons'                   # Lista simples com ícones
+
+# Fallback para ls padrão se eza não estiver disponível
+command -v eza >/dev/null || alias ll='ls -laFh'
+
+# Melhor navegação de diretórios
 alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
+alias ~="cd ~"
+alias -- -="cd -"                        # Voltar para diretório anterior
+
+# === ALIASES GIT MODERNOS ===
+alias g='git'
+alias gst='git status'
+alias gco='git checkout'
+alias gcb='git checkout -b'               # Criar e fazer checkout da branch
+alias gcm='git checkout main'
+alias gp='git push'
+alias gpu='git push -u origin'           # Push e definir upstream
+alias gl='git pull'
+alias gaa='git add -A'                   # Adicionar todos os arquivos
+alias gc='git commit -v'                 # Commit com verbose
+alias gca='git commit -v -a'             # Adicionar e fazer commit
+alias gcam='git commit -a -m'            # Adicionar e fazer commit com mensagem
+alias glog='git log --oneline --graph --all'  # Log git bonito
+
+# === ALIASES DE GERENCIADOR DE PACOTES NODE.JS ===
+# Principal: pnpm
+alias ni='pnpm install'
+alias nr='pnpm run'
+alias ns='pnpm start'
+alias nd='pnpm run dev'
+alias nb='pnpm run build'
+alias nt='pnpm test'
+alias nu='pnpm update'
+alias nx='pnpx'                          # Executar pacotes
+
+# Alternativo: bun (para operações rápidas)
+alias bi='bun install'                   # Instalação rápida
+alias br='bun run'                       # Execução rápida
+alias bs='bun start'
+alias bd='bun run dev'
+alias bb='bun run build'
+alias bt='bun test'
+
+# === ALIASES DOCKER ===
+alias d='docker'
+alias dc='docker-compose'
+alias dps='docker ps'                    # Containers em execução
+alias dpa='docker ps -a'                 # Todos os containers
+alias di='docker images'                 # Listar imagens
+alias dex='docker exec -it'              # Executar em container
+alias dlog='docker logs -f'              # Acompanhar logs
+alias dstop='docker stop $(docker ps -q)'  # Parar todos containers
+
+# === UTILITÁRIOS ===
+alias reload='source ~/.zshrc'           # Recarregar configuração do shell
+alias cat='bat'                          # Cat melhor com syntax highlighting
+alias find='fd'                          # Find melhor
+alias grep='rg'                          # Grep melhor
+alias ps='htop'                          # Visualizador de processos melhor
+alias ping='ping -c 5'                   # Limitar ping a 5 pacotes
+
+# === ESPECÍFICO macOS ===
+alias cleanup="find . -name '.DS_Store' -delete"  # Limpar arquivos DS_Store
+alias showfiles='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder'
+alias hidefiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder'
+alias flushdns='sudo dscacheutil -flushcache && sudo killall -HUP mDNSResponder'
+
+# === API/DESENVOLVIMENTO ===
+alias http='httpie'                      # Curl melhor para APIs
+alias myip='curl -s ifconfig.me'         # Obter IP externo
+alias localip='ipconfig getifaddr en0'   # Obter IP local
 
 certificado() {
     arquivo=$1
@@ -62,7 +135,7 @@ certificado() {
     fi
 
     # Move o arquivo para o S3
-    aws s3 cp "$arquivo" "s3://nfenarede-certificados/$cnpj/$novoNome.pfx" --profile prod
+    # aws s3 cp "$arquivo" "s3://nfenarede-certificados/$cnpj/$novoNome.pfx" --profile prod
 
     # Imprime o resultado
     echo "\nJSON do Certificado para MongoDB:"
@@ -90,10 +163,13 @@ nfe-download(){
                 cnpj=("34914041000105")
                 ;;
             grid)
-                cnpj=("35209579000181" "35507966000102")
+                cnpj=("35209579000181" "35507966000102" "55520238000130")
                 ;;
             amg)
-                cnpj=("32827879000136" "76768563000439" "31901951000165" "76768563000196" "17011946000156" "76768563000510")
+                cnpj=("32827879000136" "76768563000439" "31901951000165" "76768563000510")
+                ;;
+            sagaparts)
+                cnpj=( "76768563000196" "17011946000156")
                 ;;
             arthur)
                 cnpj=("36451073000147" "23747853000197" "23749594000133")
@@ -103,6 +179,9 @@ nfe-download(){
                 ;;
             win)
                 cnpj=("46673461000126" "53729797000200" "53729797000129")
+                ;;
+            vb)
+                cnpj=( "05307052000129" "29833760000161")
                 ;;
             *)
                 ;;
@@ -145,4 +224,41 @@ nfe-download(){
         # Cria um ZIP com os arquivos baixados
         zip -rj ~/Sites/arquivosNFe/$c-$mes.zip ~/Sites/arquivosNFe/$c/
     done
+}
+
+renomear_s3() {
+    if [ -z "$1" ]; then
+        echo "Uso: renomear_s3 <numero_pedido>"
+        return 1
+    fi
+
+    NUMERO_PEDIDO=$1
+    PROFILE="prod"
+    BUCKET="s3://nfenarede-g3nfe"
+
+    # Formata o número do pedido para manter seis dígitos e incluir o sufixo corretamente
+    NUMERO_FORMATADO=$(echo "$NUMERO_PEDIDO" | awk -F'.' '{printf "%06d_%d", $1, $2}')
+
+    # Obtém a lista de arquivos do S3, ordena pela data e pega o mais recente
+    ARQUIVO_ORIGINAL=$(aws s3 ls $BUCKET --recursive --profile $PROFILE | grep "$(date +%Y-%m-%d)" | grep "VEN_${NUMERO_FORMATADO}-" | sort -k1,2 | tail -n1 | awk '{print $NF}')
+
+    if [ -z "$ARQUIVO_ORIGINAL" ]; then
+        echo "Arquivo não encontrado para o pedido $NUMERO_PEDIDO"
+        return 1
+    fi
+
+    DIRETORIO=$(dirname "$ARQUIVO_ORIGINAL")
+    NOME_ARQUIVO=$(basename "$ARQUIVO_ORIGINAL" | sed -E 's/-[0-9]{14}//')
+
+    NOVO_TIMESTAMP=$(date +%Y%m%d%H%M%S)
+
+    ARQUIVO_NOVO="$DIRETORIO/${NOME_ARQUIVO}-$NOVO_TIMESTAMP.TXT"
+
+    aws s3 cp "$BUCKET/$ARQUIVO_ORIGINAL" "$BUCKET/$ARQUIVO_NOVO" --profile $PROFILE
+
+    if [ $? -eq 0 ]; then
+        echo "Arquivo renomeado com sucesso: $BUCKET/$ARQUIVO_NOVO"
+    else
+        echo "Erro ao copiar o arquivo."
+    fi
 }

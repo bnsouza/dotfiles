@@ -1,34 +1,41 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
+# Habilitar prompt instantâneo do Powerlevel10k. Deve ficar próximo ao topo do ~/.zshrc.
+# Código de inicialização que pode requerer entrada do console (prompts de senha, confirmações [y/n],
+# etc.) deve ir acima deste bloco; tudo mais pode ir abaixo.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# Path to your oh-my-zsh installation.
+# Caminho para instalação do oh-my-zsh
 export ZSH="$HOME/.oh-my-zsh"
 
 HIST_STAMPS="yyyy-mm-dd"
 
-# Theme
+# Tema
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
-# Plugins
+# Plugins - Seleção moderna para workflow de desenvolvimento
 plugins=(
-  git
-  vscode
+  git                    # Shortcuts e completions do Git
+  vscode                 # Shortcuts do VS Code
+  node                   # Completions do Node.js
+  npm                    # Completions do npm
+  docker                 # Completions e shortcuts do Docker
+  aws                    # Completions da AWS CLI
+  macos                  # Shortcuts específicos do macOS
+  zsh-autosuggestions   # Sugestões de comandos baseadas no histórico
+  zsh-completions       # Completions adicionais
 )
 
 source $ZSH/oh-my-zsh.sh
 
-# Preferred editor for local and remote sessions
+# Editor preferido para sessões locais e remotas
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='code'
 else
   export EDITOR='nano'
 fi
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+# Para customizar o prompt, execute `p10k configure` ou edite ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # Aliases
@@ -39,10 +46,10 @@ source $HOME/.inputrc
 
 # NVM
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # Carrega o nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # Carrega bash completion do nvm
 
-# NVM change version when folder has `.nvmrc` file
+# NVM muda versão quando pasta tem arquivo `.nvmrc`
 autoload -U add-zsh-hook
 load-nvmrc() {
   local node_version="$(nvm version)"
@@ -57,7 +64,7 @@ load-nvmrc() {
       nvm use
     fi
   elif [ "$node_version" != "$(nvm version default)" ]; then
-    echo "Reverting to nvm default version"
+    echo "Revertendo para versão padrão do nvm"
     nvm use default
   fi
 }
@@ -68,35 +75,24 @@ load-nvmrc
 autoload -Uz compinit
 zstyle ':completion:*' menu select
 
-# mysql-client PATH
-export PATH="/usr/local/opt/mysql-client/bin:$PATH"
-export LDFLAGS="-L/usr/local/opt/mysql-client/lib"
-export CPPFLAGS="-I/usr/local/opt/mysql-client/include"
+# Homebrew
+export HOMEBREW_NO_ENV_HINTS=1
 
 # ZSH Syntax Highlight
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-# OpenSSL v1.1 (para certificados PFK)
-export PATH="/opt/homebrew/opt/openssl@1.1/bin:$PATH"
-
-# pnpm
-export PNPM_HOME="/Users/bnsouza/Library/pnpm"
+# pnpm - Usa $HOME para funcionar com qualquer usuário
+export PNPM_HOME="$HOME/Library/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
-# pnpm end
 
-# bun completions
-[ -s "/Users/bnsouza/.bun/_bun" ] && source "/Users/bnsouza/.bun/_bun"
+# bun completions - Usa $HOME para funcionar com qualquer usuário
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
 # Tokens
 source $HOME/.tokens
 
 # Infisical
 export INFISICAL_TOKEN=$(infisical login --method=universal-auth --silent --plain)
-
-# Pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"

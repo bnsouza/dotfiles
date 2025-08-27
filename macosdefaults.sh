@@ -1,85 +1,119 @@
-# Automatically hide and show the Dock
+# Ocultar e mostrar automaticamente o Dock
 defaults write com.apple.dock autohide -bool true
-# Save screenshots to the Downloads
+# Salvar capturas de tela na pasta Downloads
 defaults write com.apple.screencapture location -string "$HOME/Downloads"
-# Save screenshots in PNG format (other options: BMP, GIF, JPG, PDF, TIFF)
+# Salvar capturas de tela no formato PNG (outras opções: BMP, GIF, JPG, PDF, TIFF)
 defaults write com.apple.screencapture type -string "png"
-# Disable the sound effects on boot
+# Desabilitar efeitos sonoros na inicialização
 sudo nvram SystemAudioVolume=" "
-# Increase window resize speed for Cocoa applications
+# Aumentar velocidade de redimensionamento de janelas para aplicações Cocoa
 defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
-# Expand save panel by default
+# Expandir painel de salvamento por padrão
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
-# Automatically quit printer app once the print jobs complete
+# Fechar automaticamente aplicativo de impressão quando trabalhos de impressão terminarem
 defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
-# Disable the “Are you sure you want to open this application?” dialog
+# Desabilitar diálogo "Tem certeza que deseja abrir esta aplicação?"
 defaults write com.apple.LaunchServices LSQuarantine -bool false
-# Sleep the display after 15 minutes
+# Adormecer o display após 15 minutos
 sudo pmset -a displaysleep 15
-# Disable machine sleep while charging
+# Desabilitar modo sleep da máquina enquanto carregando
 sudo pmset -c sleep 0
-# Set machine sleep to 5 minutes on battery
+# Definir modo sleep da máquina para 5 minutos na bateria
 sudo pmset -b sleep 5
-# Set standby delay to 24 hours (default is 1 hour)
+# Definir delay de standby para 24 horas (padrão é 1 hora)
 sudo pmset -a standbydelay 86400
-# Never go into computer sleep mode
+# Nunca entrar em modo sleep do computador
 sudo systemsetup -setcomputersleep Off > /dev/null
-# Hibernation mode
+# Modo de hibernação
 sudo pmset -a hibernatemode 0
-# Finder: show all filename extensions
+# Finder: mostrar todas as extensões de arquivos
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
-# Finder: show status bar
+# Finder: mostrar barra de status
 defaults write com.apple.finder ShowStatusBar -bool true
-# Disable the warning when changing a file extension
+# Desabilitar aviso ao alterar extensão de arquivo
 defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
-# Avoid creating .DS_Store files on network or USB volumes
+# Evitar criação de arquivos .DS_Store em volumes de rede ou USB
 defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
 defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
-# Disable disk image verification
+# Desabilitar verificação de imagem de disco
 defaults write com.apple.frameworks.diskimages skip-verify -bool true
 defaults write com.apple.frameworks.diskimages skip-verify-locked -bool true
 defaults write com.apple.frameworks.diskimages skip-verify-remote -bool true
-# Automatically open a new Finder window when a volume is mounted
+# Abrir automaticamente nova janela do Finder quando volume for montado
 defaults write com.apple.frameworks.diskimages auto-open-ro-root -bool true
 defaults write com.apple.frameworks.diskimages auto-open-rw-root -bool true
 defaults write com.apple.finder OpenWindowForNewRemovableDisk -bool true
-# Enable snap-to-grid for icons on the desktop and in other icon views
+# Habilitar snap-to-grid para ícones na área de trabalho e outras visualizações de ícones
 /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
 /usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
 /usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
-# Use column view in all Finder windows by default
+# Usar visualização em colunas em todas as janelas do Finder por padrão
 defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
-# Disable the warning before emptying the Trash
+# Desabilitar aviso antes de esvaziar lixeira
 defaults write com.apple.finder WarnOnEmptyTrash -bool false
-# Don’t display the annoying prompt when quitting iTerm
+# Não exibir prompt irritante ao sair do iTerm
 defaults write com.googlecode.iterm2 PromptOnQuit -bool false
-# Enable the automatic update check
+# Habilitar verificação automática de atualizações
 defaults write com.apple.SoftwareUpdate AutomaticCheckEnabled -bool true
-# Check for software updates daily, not just once per week
+# Verificar atualizações de software diariamente, não apenas uma vez por semana
 defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 1
-# Download newly available updates in background
+# Baixar atualizações disponíveis em segundo plano
 defaults write com.apple.SoftwareUpdate AutomaticDownload -int 1
-# Install System data files & security updates
+# Instalar arquivos de dados do sistema e atualizações de segurança
 defaults write com.apple.SoftwareUpdate CriticalUpdateInstall -int 1
-# Automatically download apps purchased on other Macs
+# Baixar automaticamente apps comprados em outros Macs
 defaults write com.apple.SoftwareUpdate ConfigDataInstall -int 1
-# Turn on app auto-update
+# Ativar auto-atualização de apps
 defaults write com.apple.commerce AutoUpdate -bool true
-# Allow the App Store to reboot machine on macOS updates
+# Permitir que App Store reinicie máquina em atualizações do macOS
 defaults write com.apple.commerce AutoUpdateRestartRequired -bool true
-# Prevent Photos from opening automatically when devices are plugged in
+# Prevenir Fotos de abrir automaticamente quando dispositivos são conectados
 defaults -currentHost write com.apple.ImageCapture disableHotPlug -bool true
-# Disable automatic capitalization as it’s annoying when typing code
+# Desabilitar capitalização automática pois é irritante ao digitar código
 defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
-# Disable smart dashes as they’re annoying when typing code
+# Desabilitar traços inteligentes pois são irritantes ao digitar código
 defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
-# Disable automatic period substitution as it’s annoying when typing code
+# Desabilitar substituição automática de pontos pois é irritante ao digitar código
 defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false
-# Disable smart quotes as they’re annoying when typing code
+# Desabilitar aspas inteligentes pois são irritantes ao digitar código
 defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
-# Disable auto-correct
+# Desabilitar correção automática
 defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
-# Set language and text formats
+# Definir idioma e formatos de texto
 defaults write NSGlobalDomain AppleLanguages -array "pt-BR" "en"
 defaults write NSGlobalDomain AppleLocale -string "pt-BR"
+
+# === MELHORIAS MODERNAS ===
+
+# Melhor responsividade - Remove animações de janela para interface mais rápida
+defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
+# Redimensionamento mais rápido de colunas no Finder
+defaults write NSGlobalDomain NSBrowserColumnResizingDisabled -bool true
+
+# Melhor comportamento do Dock
+# Usa efeito scale ao invés de genie (mais rápido)
+defaults write com.apple.dock mineffect -string "scale"
+# Minimiza janelas no ícone da aplicação (melhor organização)
+defaults write com.apple.dock minimize-to-application -bool true
+
+# Melhores padrões do Finder
+# Novas janelas abrem na pasta Home ao invés de Recentes
+defaults write com.apple.finder NewWindowTarget -string "PfHm"
+# Busca na pasta atual por padrão ao invés do Mac inteiro
+defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
+
+# Melhor responsividade de entrada
+# Trackpad/mouse mais rápido (bom para desenvolvimento)
+defaults write NSGlobalDomain com.apple.trackpad.scaling -float 3.0
+# Desabilita press-and-hold para teclas (melhor para código, habilita repetição)
+defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+# Taxa de repetição de tecla mais rápida
+defaults write NSGlobalDomain KeyRepeat -int 2
+defaults write NSGlobalDomain InitialKeyRepeat -int 15
+
+# Melhor gerenciamento de energia
+# Hibernação mais inteligente (salva RAM no disco)
+sudo pmset -a hibernatemode 3
+# Desabilita Power Nap (economiza bateria)
+sudo pmset -a powernap 0

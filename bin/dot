@@ -5,16 +5,16 @@ COMMAND_NAME=$1
 SUB_COMMAND_NAME=$2
 
 sub_help () {
-  echo "Usage: $BIN_NAME <command>"
+  echo "Uso: $BIN_NAME <comando>"
   echo
-  echo "Commands:"
-  echo "   clean            Clean up caches (brew, cargo, gem, pip)"
-  echo "   dock             Apply macOS Dock settings"
-  echo "   edit             Open dotfiles in IDE ($VISUAL) and Git GUI ($VISUAL_GIT)"
-  echo "   help             This help message"
-  echo "   macos            Apply macOS system defaults"
-  echo "   test             Run tests"
-  echo "   update           Update packages and pkg managers (brew, casks, cargo, pip3, npm, gems, macOS)"
+  echo "Comandos:"
+  echo "   clean            Limpar caches (brew, cargo, gem, pip)"
+  echo "   dock             Aplicar configurações do Dock do macOS"
+  echo "   edit             Abrir dotfiles no IDE ($VISUAL) e Git GUI ($VISUAL_GIT)"
+  echo "   help             Esta mensagem de ajuda"
+  echo "   macos            Aplicar padrões de sistema do macOS"
+  echo "   test             Executar testes"
+  echo "   update           Atualizar pacotes e gerenciadores (brew, casks, cargo, pip3, npm, gems, macOS)"
 }
 
 sub_clean () {
@@ -29,7 +29,7 @@ sub_clean () {
 }
 
 sub_dock () {
-  . "${DOTFILES_DIR}/macos/dock.sh" && echo "Dock reloaded."
+  . "${DOTFILES_DIR}/macos/dock.sh" && echo "Dock recarregado."
 }
 
 sub_edit () {
@@ -47,9 +47,9 @@ sub_update () {
 
 sub_macos () {
   for DEFAULTS_FILE in "${DOTFILES_DIR}"/macos/defaults*.sh; do
-    echo "Applying ${DEFAULTS_FILE}" && . "${DEFAULTS_FILE}"
+    echo "Aplicando ${DEFAULTS_FILE}" && . "${DEFAULTS_FILE}"
   done
-  echo "Done. Some changes may require a logout/restart to take effect."
+  echo "Concluído. Algumas mudanças podem requerer logout/reinício para ter efeito."
 }
 
 case $COMMAND_NAME in
@@ -60,7 +60,7 @@ case $COMMAND_NAME in
     shift
     sub_${COMMAND_NAME} $@
     if [ $? = 127 ]; then
-      echo "'$COMMAND_NAME' is not a known command or has errors." >&2
+      echo "'$COMMAND_NAME' não é um comando conhecido ou possui erros." >&2
       sub_help
       exit 1
     fi
