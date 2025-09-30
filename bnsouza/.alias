@@ -62,10 +62,10 @@ alias dstop='docker stop $(docker ps -q)'  # Parar todos containers
 
 # === UTILITÁRIOS ===
 alias reload='source ~/.zshrc'           # Recarregar configuração do shell
-alias cat='bat'                          # Cat melhor com syntax highlighting
-alias find='fd'                          # Find melhor
-alias grep='rg'                          # Grep melhor
-alias ps='htop'                          # Visualizador de processos melhor
+# alias cat='bat'                          # Cat melhor com syntax highlighting
+# alias find='fd'                          # Find melhor
+# alias grep='rg'                          # Grep melhor
+# alias ps='htop'                          # Visualizador de processos melhor
 alias ping='ping -c 5'                   # Limitar ping a 5 pacotes
 
 # === ESPECÍFICO macOS ===

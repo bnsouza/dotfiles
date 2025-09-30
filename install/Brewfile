@@ -4,48 +4,48 @@ tap "homebrew/cask-fonts"
 tap "homebrew/services"
 
 # Ferramentas essenciais de desenvolvimento
-brew "git"                   # Controle de versão
-brew "git-extras"           # Comandos extras do git
-brew "gh"                   # CLI do GitHub
-brew "stow"                 # Gerenciamento de dotfiles
-brew "tree"                 # Visualização de diretórios
-brew "grep"                 # Busca de texto
-brew "rename"               # Utilitário para renomear arquivos
-brew "wget"                 # Download de arquivos
-brew "pre-commit"           # Hooks do git
+brew "git"                       # Controle de versão
+brew "git-extras"                # Comandos extras do git
+brew "gh"                        # CLI do GitHub
+brew "stow"                      # Gerenciamento de dotfiles
+brew "tree"                      # Visualização de diretórios
+brew "grep"                      # Busca de texto
+brew "rename"                    # Utilitário para renomear arquivos
+brew "wget"                      # Download de arquivos
+brew "pre-commit"                # Hooks do git
 
 # Utilitários CLI modernos (versões melhores das ferramentas padrão)
-brew "bat"                  # Cat melhor com syntax highlighting
-brew "fd"                   # Find melhor (mais rápido)
-brew "ripgrep"             # Grep melhor (muito mais rápido)
-brew "eza"                 # Ls melhor com cores e ícones (sucessor do exa)
-brew "htop"                # Top melhor
-brew "jq"                  # Processador JSON
-brew "httpie"              # Curl melhor para APIs
-brew "biome"               # Linter/formatter JS/TS rápido
+brew "bat"                       # Cat melhor com syntax highlighting
+brew "fd"                        # Find melhor (mais rápido)
+brew "ripgrep"                   # Grep melhor (muito mais rápido)
+brew "eza"                       # Ls melhor com cores e ícones (sucessor do exa)
+brew "htop"                      # Top melhor
+brew "jq"                        # Processador JSON
+brew "httpie"                    # Curl melhor para APIs
+brew "biome"                     # Linter/formatter JS/TS rápido
 
 # Ecossistema Node.js (atualizado para v22)
-brew "node"                # Node.js LTS (instala a versão mais recente)
-brew "nvm"                 # Gerenciador de versão do Node
-brew "pnpm"                # Gerenciador de pacotes rápido (principal)
-brew "bun"                 # Runtime/gerenciador JS alternativo
+brew "node"                      # Node.js LTS (instala a versão mais recente)
+brew "nvm"                       # Gerenciador de versão do Node
+brew "pnpm"                      # Gerenciador de pacotes rápido (principal)
+brew "bun"                       # Runtime/gerenciador JS alternativo
 
 # Ecossistema Python (mínimo)
-brew "pipx"                # Instala apps Python em ambientes isolados
+brew "pipx"                      # Instala apps Python em ambientes isolados
 
 # Cloud e desenvolvimento
-brew "awscli"              # CLI da AWS
-brew "infisical"           # Gerenciamento de secrets
-brew "pulumi"              # Infraestrutura como código
+brew "awscli"                    # CLI da AWS
+brew "infisical"                 # Gerenciamento de secrets
+brew "pulumi"                    # Infraestrutura como código
 
 # Processamento de mídia
-brew "ffmpeg"              # Processamento de vídeo/áudio
+brew "ffmpeg"                    # Processamento de vídeo/áudio
 
 # Melhorias do shell
-brew "zsh-syntax-highlighting"  # Syntax highlighting para zsh
-brew "zsh-autosuggestions"      # Sugestões de comandos
-brew "zsh-completions"          # Completions adicionais
-brew "yabai"                    # Window manager para macOS
+brew "zsh-syntax-highlighting"   # Syntax highlighting para zsh
+brew "zsh-autosuggestions"       # Sugestões de comandos
+brew "zsh-completions"           # Completions adicionais
+brew "yabai"                     # Window manager para macOS
 
 # Extensões VS Code (apenas as essenciais)
 vscode "anthropic.claude-code"
