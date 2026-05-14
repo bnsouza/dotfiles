@@ -71,28 +71,22 @@ files:
 		echo "⚠️  Configure seu token do Raycast em ~/.config/raycast/config.json"; \
 	fi
 
-# Limpeza e manutenção moderna
-cleanup:
-	@echo "🧹 Limpando extensões do VS Code..."
-	@$(DOTFILES_DIR)/scripts/cleanup_vscode.sh
-	@echo "🧹 Limpando Homebrew..."
-	@brew cleanup
-	@brew autoremove
-	@echo "✅ Limpeza concluída!"
-
-# Instala plugins modernos do zsh (se ainda não estiverem instalados)
+# Instala plugins do oh-my-zsh referenciados em ~/.zshrc
 zsh-plugins:
-	@echo "🐚 Configurando plugins modernos do zsh..."
+	@echo "Configurando plugins do zsh..."
 	@if [ ! -d "$${ZSH_CUSTOM:-$$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" ]; then \
 		git clone https://github.com/zsh-users/zsh-autosuggestions $${ZSH_CUSTOM:-$$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions; \
 	fi
 	@if [ ! -d "$${ZSH_CUSTOM:-$$HOME/.oh-my-zsh/custom}/plugins/zsh-completions" ]; then \
 		git clone https://github.com/zsh-users/zsh-completions $${ZSH_CUSTOM:-$$HOME/.oh-my-zsh/custom}/plugins/zsh-completions; \
 	fi
-	@echo "✅ Plugins do zsh instalados!"
+	@echo "Plugins do zsh prontos."
 
-# Setup moderno completo
-setup-modern: all zsh-plugins
-	@echo "🚀 Setup moderno dos dotfiles concluído!"
-	@echo "💡 Execute 'make cleanup' para remover pacotes e extensões antigas"
-	@echo "⚠️  Lembre-se de reiniciar seu terminal para usar os novos aliases e plugins"
+# Limpeza do Homebrew (caches + pacotes órfãos)
+cleanup:
+	brew cleanup
+	brew autoremove
+
+# Setup completo + plugins do zsh
+setup: all zsh-plugins
+	@echo "Setup concluído. Reinicie o terminal para carregar os novos aliases."

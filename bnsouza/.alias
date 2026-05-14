@@ -1,13 +1,7 @@
-# === ALIASES CLI MODERNOS ===
-
-# Melhor ls com eza (colorido e informativo)
-alias ll='eza -la --icons --git'         # Lista longa com ícones e status git
-alias la='eza -a --icons'                # Todos os arquivos com ícones
-alias lt='eza -T --level=2 --icons'      # Visualização em árvore (2 níveis)
-alias ls='eza --icons'                   # Lista simples com ícones
-
-# Fallback para ls padrão se eza não estiver disponível
-command -v eza >/dev/null || alias ll='ls -laFh'
+# === LISTAGEM ===
+alias ll='ls -laFh'                      # Lista longa com tamanhos legíveis
+alias la='ls -aFh'                       # Todos os arquivos
+alias lt='tree -L 2'                     # Visualização em árvore (2 níveis)
 
 # Melhor navegação de diretórios
 alias ..="cd .."
@@ -62,10 +56,8 @@ alias dstop='docker stop $(docker ps -q)'  # Parar todos containers
 
 # === UTILITÁRIOS ===
 alias reload='source ~/.zshrc'           # Recarregar configuração do shell
-# alias cat='bat'                          # Cat melhor com syntax highlighting
-# alias find='fd'                          # Find melhor
-# alias grep='rg'                          # Grep melhor
-# alias ps='htop'                          # Visualizador de processos melhor
+alias find='fd'                          # Find melhor (mais rápido)
+alias grep='rg'                          # Grep melhor (ripgrep)
 alias ping='ping -c 5'                   # Limitar ping a 5 pacotes
 
 # === ESPECÍFICO macOS ===
@@ -74,191 +66,9 @@ alias showfiles='defaults write com.apple.finder AppleShowAllFiles YES; killall 
 alias hidefiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder'
 alias flushdns='sudo dscacheutil -flushcache && sudo killall -HUP mDNSResponder'
 
-# === API/DESENVOLVIMENTO ===
-alias http='httpie'                      # Curl melhor para APIs
+# === REDE ===
 alias myip='curl -s ifconfig.me'         # Obter IP externo
 alias localip='ipconfig getifaddr en0'   # Obter IP local
 
-certificado() {
-    arquivo=$1
-    senha=$2
-    cnpj_opcional=$3 # CNPJ opcional para ser usado caso o CNPJ não seja encontrado no certificado
-
-    echo " "
-
-    # Verifica se o arquivo existe
-    if [ ! -f "$arquivo" ]; then
-        echo "Erro: O arquivo '$arquivo' não existe!"
-        return 1
-    fi
-
-    # Tenta extrair informações usando openssl para verificar se a senha está correta
-    if ! openssl_output=$(openssl pkcs12 -in "$arquivo" -nodes -passin pass:"$senha" -noout 2>&1); then
-        echo "Erro ao processar o certificado. Verifique se a senha está correta.\n"
-        echo "Saída do OpenSSL:"
-        echo "$openssl_output"
-        return 2
-    fi
-
-    # Extrai o CNPJ usando sed
-    cnpj=$(openssl pkcs12 -in "$arquivo" -nodes -passin pass:"$senha" | openssl x509 -noout -subject | sed -n 's/.*\([0-9]\{14\}\).*/\1/p')
-
-    if [ -n "$cnpj" ]; then
-        echo "CNPJ: $cnpj\n"
-    else
-        echo "CNPJ não encontrado no certificado..."
-        if [ -n "$cnpj_opcional" ]; then
-            cnpj=$cnpj_opcional
-            echo "Utilizando CNPJ opcional fornecido: $cnpj"
-        else
-            echo "Erro: CNPJ não fornecido e não encontrado no certificado!"
-            return 3
-        fi
-    fi
-
-    # Extrai a data de expiração e formata
-    validade=$(openssl pkcs12 -in "$arquivo" -nodes -passin pass:"$senha" | openssl x509 -noout -enddate | cut -d= -f2)
-    if [ -z "$validade" ]; then
-        echo "Erro: Não foi possível extrair a data de validade do certificado."
-        return 3
-    fi
-
-    # Converte e formata a data para os formatos utilizados
-    novoNome=$(LC_ALL=C date -j -f "%b %d %H:%M:%S %Y %Z" "$validade" +"%Y%m%d%H%M%S")
-    ISODate=$(LC_ALL=C date -j -f "%b %d %H:%M:%S %Y %Z" "$validade" +"%Y-%m-%dT%H:%M:%S")
-
-    # Comando para criptografar a senha e imprimir
-    senhaCrypt=$(php -r "echo openssl_encrypt('$senha', 'AES-128-ECB', 'c67ff511bd88d857');")
-    if [ -z "$senhaCrypt" ]; then
-        echo "Erro: Não foi possível criptografar a senha."
-        return 4
-    fi
-
-    # Move o arquivo para o S3
-    # aws s3 cp "$arquivo" "s3://nfenarede-certificados/$cnpj/$novoNome.pfx" --profile prod
-
-    # Imprime o resultado
-    echo "\nJSON do Certificado para MongoDB:"
-    echo "{\"validade\": new ISODate(\"$ISODate.000Z\"), \"s3\": \"$cnpj/$novoNome.pfx\", \"senha\": \"$senhaCrypt\"}"
-}
-
-
-nfe-download(){
-    cnpj=$1
-    a=$2
-    mes=$3
-
-    echo " "
-
-    # Verifica se o cnpj tem 14 dígitos
-    if [[ $cnpj =~ ^[0-9]{14}$ ]]; then
-        cnpj=("$cnpj")
-    else
-        # Permite trocar o nome da empresa pelo CNPJ
-        case "$cnpj" in
-            keide)
-                cnpj=("20877867000137")
-                ;;
-            proenter)
-                cnpj=("34914041000105")
-                ;;
-            grid)
-                cnpj=("35209579000181" "35507966000102" "55520238000130")
-                ;;
-            amg)
-                cnpj=("32827879000136" "76768563000439" "31901951000165" "76768563000510")
-                ;;
-            sagaparts)
-                cnpj=( "76768563000196" "17011946000156")
-                ;;
-            arthur)
-                cnpj=("36451073000147" "23747853000197" "23749594000133")
-                ;;
-            jacare)
-                cnpj=("17046931000123")
-                ;;
-            win)
-                cnpj=("46673461000126" "53729797000200" "53729797000129")
-                ;;
-            vb)
-                cnpj=( "05307052000129" "29833760000161")
-                ;;
-            *)
-                ;;
-        esac
-    fi
-
-    # Se não tiver CNPJ, sai com erro
-    if [[ ${#cnpj[@]} -eq 0 ]]; then
-        echo "Erro: Empresa não encontrada ou não reconhecida."
-        return 1
-    fi
-
-    # Testa se o tipo de arquivo foi informado, senão pega todos
-    if [ -z "$a" ]; then
-        echo "Tipo de arquivo não informado, baixando todos..."
-        a="*"
-    fi
-
-    # Testa se o mês foi informado, senão pega o mês anterior
-    if [ -z "$mes" ]; then
-        ano_atual=$(date +%y)
-        mes_anterior=$(date -v-1m +%m)
-        mes="${ano_atual}${mes_anterior}"
-        echo "Mês não informado, definindo como mês anterior ($mes_anterior)..."
-    fi
-
-    # Testa se a pasta `~/Sites/arquivosNFe/` existe, senão cria
-    if [ ! -d ~/Sites/arquivosNFe/ ]; then
-        echo "Criando pasta para armazenar os arquivos..."
-        mkdir ~/Sites/arquivosNFe/
-    fi
-
-    echo "------------------------------------------------------------------"
-
-    for c in "${cnpj[@]}"; do
-        # Baixa os arquivos do S3
-        echo "Baixando arquivos do CNPJ $c referente ao ano/mês $mes..."
-        aws s3 cp s3://nfenarede-notasfiscais/$c ~/Sites/arquivosNFe/$c/ --profile prod --recursive --exclude "*" --include "*$mes$c*.$a"
-
-        # Cria um ZIP com os arquivos baixados
-        zip -rj ~/Sites/arquivosNFe/$c-$mes.zip ~/Sites/arquivosNFe/$c/
-    done
-}
-
-renomear_s3() {
-    if [ -z "$1" ]; then
-        echo "Uso: renomear_s3 <numero_pedido>"
-        return 1
-    fi
-
-    NUMERO_PEDIDO=$1
-    PROFILE="prod"
-    BUCKET="s3://nfenarede-g3nfe"
-
-    # Formata o número do pedido para manter seis dígitos e incluir o sufixo corretamente
-    NUMERO_FORMATADO=$(echo "$NUMERO_PEDIDO" | awk -F'.' '{printf "%06d_%d", $1, $2}')
-
-    # Obtém a lista de arquivos do S3, ordena pela data e pega o mais recente
-    ARQUIVO_ORIGINAL=$(aws s3 ls $BUCKET --recursive --profile $PROFILE | grep "$(date +%Y-%m-%d)" | grep "VEN_${NUMERO_FORMATADO}-" | sort -k1,2 | tail -n1 | awk '{print $NF}')
-
-    if [ -z "$ARQUIVO_ORIGINAL" ]; then
-        echo "Arquivo não encontrado para o pedido $NUMERO_PEDIDO"
-        return 1
-    fi
-
-    DIRETORIO=$(dirname "$ARQUIVO_ORIGINAL")
-    NOME_ARQUIVO=$(basename "$ARQUIVO_ORIGINAL" | sed -E 's/-[0-9]{14}//')
-
-    NOVO_TIMESTAMP=$(date +%Y%m%d%H%M%S)
-
-    ARQUIVO_NOVO="$DIRETORIO/${NOME_ARQUIVO}-$NOVO_TIMESTAMP.TXT"
-
-    aws s3 cp "$BUCKET/$ARQUIVO_ORIGINAL" "$BUCKET/$ARQUIVO_NOVO" --profile $PROFILE
-
-    if [ $? -eq 0 ]; then
-        echo "Arquivo renomeado com sucesso: $BUCKET/$ARQUIVO_NOVO"
-    else
-        echo "Erro ao copiar o arquivo."
-    fi
-}
+# === ATALHOS DE PROJETO ===
+alias zdb='cd ~/Sites/Zerpi && ./scripts/db-prod.sh'

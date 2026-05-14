@@ -81,18 +81,24 @@ export HOMEBREW_NO_ENV_HINTS=1
 # ZSH Syntax Highlight
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-# pnpm - Usa $HOME para funcionar com qualquer usuário
+# pnpm
 export PNPM_HOME="$HOME/Library/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 
-# bun completions - Usa $HOME para funcionar com qualquer usuário
+# bun completions
 [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
-# Tokens
-source $HOME/.tokens
+# PHP 8.5 (Homebrew)
+export PATH="/opt/homebrew/opt/php@8.5/bin:$PATH"
 
-# Infisical
-export INFISICAL_TOKEN=$(infisical login --method=universal-auth --silent --plain)
+# Tokens (variáveis privadas — arquivo gitignored)
+[ -f "$HOME/.tokens" ] && source "$HOME/.tokens"
+
+# Infisical: login sob demanda (evita request de rede em todo shell startup).
+# Use `infisical-login` antes de comandos que precisam do INFISICAL_TOKEN.
+infisical-login() {
+  export INFISICAL_TOKEN="$(infisical login --method=universal-auth --silent --plain)"
+}

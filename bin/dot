@@ -1,55 +1,43 @@
 #!/usr/bin/env bash
+#
+# Utilitário de manutenção dos dotfiles.
+# Espera que a variável DOTFILES_DIR aponte para o repositório (exportada no .zshrc, se necessário).
 
 BIN_NAME=$(basename "$0")
 COMMAND_NAME=$1
-SUB_COMMAND_NAME=$2
 
 sub_help () {
   echo "Uso: $BIN_NAME <comando>"
   echo
   echo "Comandos:"
-  echo "   clean            Limpar caches (brew, cargo, gem, pip)"
-  echo "   dock             Aplicar configurações do Dock do macOS"
-  echo "   edit             Abrir dotfiles no IDE ($VISUAL) e Git GUI ($VISUAL_GIT)"
-  echo "   help             Esta mensagem de ajuda"
-  echo "   macos            Aplicar padrões de sistema do macOS"
-  echo "   test             Executar testes"
-  echo "   update           Atualizar pacotes e gerenciadores (brew, casks, cargo, pip3, npm, gems, macOS)"
+  echo "   clean    Limpar caches (brew, gem, pip)"
+  echo "   edit     Abrir o repositório de dotfiles no editor (\$VISUAL ou \$EDITOR)"
+  echo "   macos    Reaplicar defaults do macOS (macosdefaults.sh)"
+  echo "   update   Atualizar pacotes Homebrew (formulae e casks)"
+  echo "   help     Esta mensagem"
 }
 
 sub_clean () {
-  echo "$ brew cleanup"
   brew cleanup
-  echo "$ cargo cache --autoclean"
-  cargo cache --autoclean
-  echo "$ gem cleanup"
-  gem cleanup
-  echo "$ pip cache purge"
-  pip cache purge
-}
-
-sub_dock () {
-  . "${DOTFILES_DIR}/macos/dock.sh" && echo "Dock recarregado."
+  command -v gem >/dev/null && gem cleanup
+  command -v pip >/dev/null && pip cache purge
 }
 
 sub_edit () {
-  sh -c "$VISUAL $DOTFILES_DIR"
-  sh -c "$VISUAL_GIT $DOTFILES_DIR"
-}
-
-sub_test () {
-  bats "$DOTFILES_DIR"/test/*.bats
-}
-
-sub_update () {
-  topgrade
+  DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.dotfiles}"
+  "${VISUAL:-${EDITOR:-code}}" "$DOTFILES_DIR"
 }
 
 sub_macos () {
-  for DEFAULTS_FILE in "${DOTFILES_DIR}"/macos/defaults*.sh; do
-    echo "Aplicando ${DEFAULTS_FILE}" && . "${DEFAULTS_FILE}"
-  done
-  echo "Concluído. Algumas mudanças podem requerer logout/reinício para ter efeito."
+  DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.dotfiles}"
+  bash "$DOTFILES_DIR/macosdefaults.sh"
+}
+
+sub_update () {
+  brew update
+  brew upgrade
+  brew upgrade --cask
+  brew cleanup
 }
 
 case $COMMAND_NAME in
@@ -58,9 +46,10 @@ case $COMMAND_NAME in
     ;;
   *)
     shift
-    sub_${COMMAND_NAME} $@
-    if [ $? = 127 ]; then
-      echo "'$COMMAND_NAME' não é um comando conhecido ou possui erros." >&2
+    if declare -f "sub_${COMMAND_NAME}" >/dev/null; then
+      "sub_${COMMAND_NAME}" "$@"
+    else
+      echo "'$COMMAND_NAME' não é um comando conhecido." >&2
       sub_help
       exit 1
     fi

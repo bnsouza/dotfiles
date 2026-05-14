@@ -1,37 +1,31 @@
-tap "homebrew/cask"
-tap "homebrew/cask-fonts"
-
 # Aplicações essenciais
 cask "1password"                    # Gerenciador de senhas
-cask "google-chrome"               # Navegador web
-cask "visual-studio-code"          # Editor de código
+cask "google-chrome"                # Navegador web
+cask "visual-studio-code"           # Editor de código
 
 # Ferramentas de desenvolvimento
-cask "karabiner-elements"          # Customização de teclado
-cask "figma"                       # Ferramenta de design
-cask "datagrip"                    # IDE de banco de dados
-cask "github-desktop"              # Cliente Git visual
-cask "postman"                     # Testes de API
-cask "docker"                      # Container management
+cask "karabiner-elements"           # Customização de teclado
+cask "figma"                        # Ferramenta de design
+cask "datagrip"                     # IDE de banco de dados
+cask "postman"                      # Testes de API
+cask "docker"                       # Container management
 
 # Fontes
-cask "font-fira-code"              # Fonte para programação
-cask "font-fira-code-nerd-font"    # Fonte para programação com ícones
-cask "font-hack"                   # Fonte alternativa para programação
+cask "font-fira-code"               # Fonte para programação
+cask "font-fira-code-nerd-font"     # Fonte com ícones (usada pelo Powerlevel10k)
+cask "font-hack"                    # Fonte alternativa para programação
 
 # Acesso remoto e colaboração
-cask "anydesk"                     # Desktop remoto
-cask "microsoft-remote-desktop"    # Cliente RDP da Microsoft
+cask "anydesk"                      # Desktop remoto
+cask "microsoft-remote-desktop"     # Cliente RDP da Microsoft
 
 # Comunicação e produtividade
-cask "discord"                    # Chat para comunidades
-cask "linear"                     # Gestão de projetos
-cask "claude"                     # Cliente Claude desktop
+cask "discord"                      # Chat para comunidades
+cask "linear"                       # Gestão de projetos
+cask "claude"                       # Cliente Claude desktop
 
 # Terminal e utilitários
-cask "iterm2"                     # Terminal avançado
-cask "raycast"                    # Launcher e produtividade
-
-# Utilitários
-cask "beardedspice"               # Teclas de mídia para players web
-cask "whatsapp"                   # Mensagens
+cask "iterm2"                       # Terminal avançado
+cask "raycast"                      # Launcher e produtividade
+cask "beardedspice"                 # Teclas de mídia para players web
+cask "whatsapp"                     # Mensagens

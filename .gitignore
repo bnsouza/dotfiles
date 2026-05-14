@@ -1,4 +1,17 @@
-/.DS_Store
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Brew bundle lockfile (gerado automaticamente)
 Brewfile.lock.json
+
+# Segredos / variáveis privadas
 .tokens
+bnsouza/.tokens
+
+# Backups automáticos do Karabiner
 config/karabiner/automatic_backups/
+
+# Lixo de runtime do Raycast
+config/raycast/extensions/
+config/raycast/config.json

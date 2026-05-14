@@ -1,53 +1,42 @@
 # Repositórios essenciais
 tap "homebrew/bundle"
-tap "homebrew/cask-fonts"
 tap "homebrew/services"
 
 # Ferramentas essenciais de desenvolvimento
 brew "git"                       # Controle de versão
 brew "git-extras"                # Comandos extras do git
 brew "gh"                        # CLI do GitHub
-brew "stow"                      # Gerenciamento de dotfiles
-brew "tree"                      # Visualização de diretórios
-brew "grep"                      # Busca de texto
-brew "rename"                    # Utilitário para renomear arquivos
+brew "stow"                      # Gerenciamento de dotfiles (symlinks)
+brew "tree"                      # Visualização de diretórios em árvore
+brew "grep"                      # GNU grep (versão recente, sobre o grep do sistema)
 brew "wget"                      # Download de arquivos
-brew "pre-commit"                # Hooks do git
 
-# Utilitários CLI modernos (versões melhores das ferramentas padrão)
-brew "bat"                       # Cat melhor com syntax highlighting
-brew "fd"                        # Find melhor (mais rápido)
-brew "ripgrep"                   # Grep melhor (muito mais rápido)
-brew "eza"                       # Ls melhor com cores e ícones (sucessor do exa)
-brew "htop"                      # Top melhor
+# Utilitários CLI modernos
+brew "fd"                        # find mais rápido — aliased como `find`
+brew "ripgrep"                   # grep muito mais rápido — aliased como `grep`
 brew "jq"                        # Processador JSON
-brew "httpie"                    # Curl melhor para APIs
 brew "biome"                     # Linter/formatter JS/TS rápido
 
-# Ecossistema Node.js (atualizado para v22)
-brew "node"                      # Node.js LTS (instala a versão mais recente)
+# Ecossistema Node.js
+brew "node"                      # Node.js (versão atual)
 brew "nvm"                       # Gerenciador de versão do Node
-brew "pnpm"                      # Gerenciador de pacotes rápido (principal)
+brew "pnpm"                      # Gerenciador de pacotes (principal)
 brew "bun"                       # Runtime/gerenciador JS alternativo
 
-# Ecossistema Python (mínimo)
-brew "pipx"                      # Instala apps Python em ambientes isolados
-
-# Cloud e desenvolvimento
+# Cloud / Secrets / Mídia
 brew "awscli"                    # CLI da AWS
-brew "infisical"                 # Gerenciamento de secrets
-brew "pulumi"                    # Infraestrutura como código
-
-# Processamento de mídia
+brew "infisical"                 # Gerenciamento de secrets (uso lazy — ver infisical-login no .zshrc)
 brew "ffmpeg"                    # Processamento de vídeo/áudio
 
-# Melhorias do shell
-brew "zsh-syntax-highlighting"   # Syntax highlighting para zsh
-brew "zsh-autosuggestions"       # Sugestões de comandos
-brew "zsh-completions"           # Completions adicionais
+# Janela / produtividade
 brew "yabai"                     # Window manager para macOS
 
-# Extensões VS Code (apenas as essenciais)
+# Shell — syntax highlighting é carregado direto no .zshrc.
+# Os plugins zsh-autosuggestions/zsh-completions ficam por conta do oh-my-zsh
+# (clonados pelo `make zsh-plugins`), não pelo brew.
+brew "zsh-syntax-highlighting"
+
+# Extensões VS Code
 vscode "anthropic.claude-code"
 vscode "github.copilot"
 vscode "github.copilot-chat"
