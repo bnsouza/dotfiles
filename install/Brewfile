@@ -49,8 +49,6 @@ brew "zsh-syntax-highlighting"
 
 # Extensões VS Code
 vscode "anthropic.claude-code"
-vscode "github.copilot"
-vscode "github.copilot-chat"
 vscode "openai.chatgpt"
 vscode "dracula-theme.theme-dracula"
 vscode "biomejs.biome"
