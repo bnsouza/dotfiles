@@ -1,7 +1,9 @@
 DOTFILES_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 HOMEBREW_PREFIX := $(shell bin/is-supported bin/is-arm64 /opt/homebrew /usr/local)
-PATH := $(HOMEBREW_PREFIX)/bin:$(DOTFILES_DIR)/bin:$(PATH)
-SHELL := env PATH=$(PATH) /bin/bash
+# PATH exportado (e não via `env PATH=…` no SHELL) para suportar diretórios com espaço,
+# como o "Application Support" que o Herd injeta no PATH.
+export PATH := $(HOMEBREW_PREFIX)/bin:$(DOTFILES_DIR)/bin:$(PATH)
+SHELL := /bin/bash
 BIN := $(HOMEBREW_PREFIX)/bin
 USER_DIR := $(shell basename $(HOME))
 export XDG_CONFIG_HOME = $(HOME)/.config

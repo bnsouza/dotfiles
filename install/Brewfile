@@ -1,6 +1,8 @@
-# Repositórios essenciais
-tap "homebrew/bundle"
-tap "homebrew/services"
+# Taps de terceiros (homebrew/bundle e homebrew/services já vêm embutidos no brew)
+tap "asmvik/formulae"            # yabai
+tap "infisical/get-cli"          # infisical
+tap "oven-sh/bun"                # bun
+tap "hashicorp/tap"              # terraform
 
 # Ferramentas essenciais de desenvolvimento
 brew "git"                       # Controle de versão
@@ -21,15 +23,24 @@ brew "biome"                     # Linter/formatter JS/TS rápido
 brew "node"                      # Node.js (versão atual)
 brew "nvm"                       # Gerenciador de versão do Node
 brew "pnpm"                      # Gerenciador de pacotes (principal)
-brew "bun"                       # Runtime/gerenciador JS alternativo
+brew "oven-sh/bun/bun"           # Runtime/gerenciador JS alternativo
+
+# Python
+brew "uv"                        # Gerenciador de pacotes/ambientes Python
+
+# PHP
+brew "php"                       # PHP (atual) — PATH do php@8.5 no .zshrc
+brew "composer"                  # Gerenciador de pacotes PHP
 
 # Cloud / Secrets / Mídia
 brew "awscli"                    # CLI da AWS
-brew "infisical"                 # Gerenciamento de secrets (uso lazy — ver infisical-login no .zshrc)
+brew "hashicorp/tap/terraform"   # Infraestrutura como código
+brew "neonctl"                   # CLI do Neon (Postgres)
+brew "infisical/get-cli/infisical" # Gerenciamento de secrets (uso lazy — ver infisical-login no .zshrc)
 brew "ffmpeg"                    # Processamento de vídeo/áudio
 
 # Janela / produtividade
-brew "yabai"                     # Window manager para macOS
+brew "asmvik/formulae/yabai"     # Window manager — usado pelos scripts do Raycast
 
 # Shell — syntax highlighting é carregado direto no .zshrc.
 # Os plugins zsh-autosuggestions/zsh-completions ficam por conta do oh-my-zsh

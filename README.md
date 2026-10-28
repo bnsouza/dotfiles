@@ -21,13 +21,15 @@ versionado e linkado para `$HOME` via [GNU Stow](https://www.gnu.org/software/st
 │   ├── .zshrc             # shell config (oh-my-zsh + p10k + plugins)
 │   ├── .alias             # aliases e atalhos
 │   ├── .inputrc           # keybindings do readline (teclado numérico, navegação)
+│   ├── .p10k.zsh          # tema do Powerlevel10k (gerado por `p10k configure`)
+│   ├── .yabairc           # config do yabai (window manager)
 │   └── .tokens            # GITIGNORED. Variáveis privadas (secrets).
 │
 ├── config/                # → symlinked para $XDG_CONFIG_HOME (~/.config/)
 │   ├── git/               # git config + gitignore global
 │   ├── gh/                # GitHub CLI
 │   ├── karabiner/         # remapeamento de teclado
-│   └── raycast/           # apenas template; o config real fica em ~/.config/raycast/
+│   └── raycast/           # template do config + scripts/ (Script Commands: alinhar janelas)
 │
 ├── install/
 │   ├── Brewfile           # pacotes CLI + extensões VS Code
@@ -71,6 +73,10 @@ Depois:
 - Crie o `~/.tokens` (não está no repo). Ver seção **Tokens** abaixo.
 - `gh auth login` para autenticar o GitHub CLI.
 - Abra Raycast manualmente e configure (config dele fica em `~/.config/raycast/`).
+- Raycast → Settings → Extensions → Script Commands → **Add Directories** →
+  `~/.config/raycast/scripts` (scripts de alinhar janelas à esquerda/direita).
+- Inicie o yabai (`yabai --start-service`) e dê permissão de Acessibilidade em
+  System Settings → Privacy & Security. Os scripts do Raycast dependem dele.
 - Reinicie o terminal.
 
 ---
@@ -109,16 +115,18 @@ em [bnsouza/.alias](bnsouza/.alias)
 
 **Node**: `node`, `nvm`, `pnpm`, `bun`
 
-**Cloud/Mídia**: `awscli`, `infisical`, `ffmpeg`
+**Python/PHP**: `uv`, `php`, `composer`
 
-**Outros**: `yabai` (window manager), `zsh-syntax-highlighting`
+**Cloud/Mídia**: `awscli`, `terraform`, `neonctl`, `infisical`, `ffmpeg`
+
+**Outros**: `yabai` (window manager, usado pelos scripts do Raycast), `zsh-syntax-highlighting`
 
 ### Aplicações (`install/Caskfile`)
 
-1Password, Google Chrome, VS Code, iTerm2, Karabiner Elements, Figma, DataGrip,
-Postman, Docker Desktop, Raycast, Claude desktop, Discord, Linear, WhatsApp,
-AnyDesk, Microsoft Remote Desktop, BeardedSpice — e as fontes Fira Code / Fira Code Nerd
-Font / Hack.
+1Password, Google Chrome, Dia, VS Code, iTerm2, Karabiner Elements, Figma, DataGrip,
+OrbStack, Raycast, Claude desktop, Discord, Linear, Notion Calendar, Beeper, WhatsApp,
+Shottr, Pearcleaner, Spotify, AnyDesk, Microsoft Remote Desktop, BeardedSpice,
+Logi Options+, Bambu Studio — e as fontes Fira Code / Fira Code Nerd Font / Hack / Monaspace.
 
 ### Extensões VS Code
 
@@ -126,7 +134,8 @@ Definidas no próprio Brewfile com `vscode "id"`. Instala pelo `brew bundle`.
 
 ### Como adicionar / remover
 
-- **CLI tool**: edite `install/Brewfile` → `brew bundle --file=install/Brewfile`
+- **CLI tool**: edite `install/Brewfile` → `brew bundle --file=install/Brewfile`.
+  Fórmulas de tap de terceiros precisam do `tap "…"` e do nome completo (`brew "dono/tap/nome"`).
 - **App GUI**: edite `install/Caskfile` → `brew bundle --file=install/Caskfile`
 - **Extensão VS Code**: adicione `vscode "publisher.extension"` no `Brewfile`
 - **Pra remover** depois de tirar do Brewfile: `brew uninstall <nome>` (o bundle não desinstala sozinho)
@@ -138,7 +147,7 @@ Definidas no próprio Brewfile com `vscode "id"`. Instala pelo `brew bundle`.
 [bnsouza/.zshrc](bnsouza/.zshrc) carrega, na ordem:
 
 1. Powerlevel10k instant prompt (cache no `$XDG_CACHE_HOME`)
-2. oh-my-zsh com os plugins: `git`, `vscode`, `node`, `npm`, `docker`, `aws`, `macos`,
+2. oh-my-zsh com os plugins: `git`, `vscode`, `node`, `npm`, `aws`, `macos`,
    `zsh-autosuggestions`, `zsh-completions`
 3. `~/.p10k.zsh` (gerado por `p10k configure`)
 4. `~/.alias` — aliases definidos em [bnsouza/.alias](bnsouza/.alias)
@@ -222,6 +231,19 @@ Backups automáticos do app caem em `config/karabiner/automatic_backups/` (gitig
 
 ---
 
+## Raycast Scripts
+
+Script Commands em [config/raycast/scripts/](config/raycast/scripts/), linkados para
+`~/.config/raycast/scripts`. Usam `yabai` + `jq`:
+
+- `alinhar-esquerda.sh` / `alinhar-direita.sh` — alternam a janela ativa entre metade da
+  tela → tela cheia no próximo monitor → metade desse monitor.
+
+Para adicionar um script novo, crie o `.sh` na pasta (com os headers `@raycast.*`) e dê
+`chmod +x`. O Raycast detecta sozinho.
+
+---
+
 ## Troubleshooting
 
 | Problema | O que fazer |
@@ -230,5 +252,7 @@ Backups automáticos do app caem em `config/karabiner/automatic_backups/` (gitig
 | `make link` falha em algum arquivo | Já existe arquivo regular em `$HOME` com aquele nome; ele será movido para `.bak` |
 | VS Code reclama de extensão faltando | `brew bundle --file=install/Brewfile` |
 | Brew bundle reclama de tap | Os taps oficiais mudaram. Confirme no Brewfile/Caskfile que só estão os necessários |
+| Script do Raycast não move a janela | `yabai --start-service` e confira a permissão de Acessibilidade do yabai |
+| `make` falha com "No such file or directory" no PATH | Algum diretório com espaço no PATH; o Makefile já exporta o PATH com `export PATH :=` (não volte para `SHELL := env PATH=…`) |
 | Shell muito lento | Confira se algum comando síncrono foi adicionado ao `.zshrc` (era o caso do `infisical login`) |
 | Infisical pede credenciais | Rode `infisical-login` manualmente; verifique se `~/.tokens` tem as variáveis |

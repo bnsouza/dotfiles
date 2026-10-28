@@ -14,11 +14,12 @@ management. Anything that ends up in `$HOME` is either a symlink into this repo
   `macosdefaults`, `files`, `zsh-plugins`, `cleanup`.
 - `bin/` — utilities added to PATH. `dot` is the umbrella command (`dot clean`,
   `dot update`, `dot macos`, `dot edit`).
-- `bnsouza/` — files symlinked into `$HOME` (`.zshrc`, `.alias`, `.inputrc`, `.tokens`).
+- `bnsouza/` — files symlinked into `$HOME` (`.zshrc`, `.alias`, `.inputrc`, `.tokens`,
+  `.p10k.zsh`, `.yabairc`).
   The directory name is detected dynamically (`USER_DIR := $(shell basename $(HOME))`),
   so the repo works for any user.
 - `config/` — files symlinked into `$XDG_CONFIG_HOME` (`git/`, `gh/`, `karabiner/`,
-  `raycast/` template only).
+  `raycast/` — config template + `scripts/` with Raycast Script Commands that use yabai).
 - `install/Brewfile` — CLI packages + VS Code extensions.
 - `install/Caskfile` — GUI applications.
 - `files/` — plists copied (not symlinked) by `make files` (iTerm2, DefaultKeyBinding).
@@ -31,6 +32,9 @@ management. Anything that ends up in `$HOME` is either a symlink into this repo
   not as a synchronous network call at shell startup. Don't reintroduce a sync call.
 - Comments in shell/config files are written in Portuguese (BR) to match the repo style.
 - The README is the user-facing reference; this file is for assistants.
+- The Makefile uses `export PATH :=` + `SHELL := /bin/bash`. Don't go back to
+  `SHELL := env PATH=$(PATH) …` — it breaks when PATH has spaces (e.g. `~/Library/Application Support/...`).
+- Third-party tap formulae in the Brewfile need both `tap "…"` and the fully qualified name.
 
 ## Common operations
 

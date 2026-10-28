@@ -19,7 +19,6 @@ plugins=(
   vscode                 # Shortcuts do VS Code
   node                   # Completions do Node.js
   npm                    # Completions do npm
-  docker                 # Completions e shortcuts do Docker
   aws                    # Completions da AWS CLI
   macos                  # Shortcuts específicos do macOS
   zsh-autosuggestions   # Sugestões de comandos baseadas no histórico
@@ -102,3 +101,4 @@ export PATH="/opt/homebrew/opt/php@8.5/bin:$PATH"
 infisical-login() {
   export INFISICAL_TOKEN="$(infisical login --method=universal-auth --silent --plain)"
 }
+
