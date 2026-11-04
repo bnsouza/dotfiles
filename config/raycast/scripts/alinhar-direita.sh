@@ -59,6 +59,18 @@ if [ "$app_name" = "Dia" ]; then
     exit 1
   fi
 
+elif [ "$app_name" = "Arc" ]; then
+  pos_x=1060
+  width=1500
+  if ! yabai -m window "$win_id" --move abs:"$pos_x":"$frame_y" 2>/dev/null; then
+    echo "Aviso: Não foi possível mover a janela do Arc"
+    exit 1
+  fi
+  if ! yabai -m window "$win_id" --resize abs:"$width":"$frame_h" 2>/dev/null; then
+    echo "Aviso: Não foi possível redimensionar a janela do Arc"
+    exit 1
+  fi
+
 elif [ "$app_name" = "Claude" ] || [ "$app_name" = "Notion Calendar" ]; then
   # Apps que podem ter restrições de acessibilidade - usa posicionamento mais suave
   half_width=$((frame_w / 2))
